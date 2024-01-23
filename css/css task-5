@@ -1,0 +1,23 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+.widget {
+  text-align: center;
+}
+
+.color {
+  font-weight: bold;
+}
+
+.change-color {
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
