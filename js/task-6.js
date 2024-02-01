@@ -1,47 +1,40 @@
-const controls = document.getElementById('controls');
-const boxesContainer = document.getElementById('boxes');
+const boxForItems = document.querySelector('#controls');
+const input = boxForItems.querySelector('input');
+const btnCreate = boxForItems.querySelector('[data-create]');
+const btnDestroyer = boxForItems.querySelector('[data-destroy]');
+const boxContainers = document.querySelector('#boxes');
 
-controls.addEventListener('click', handleButtonClick);
+btnCreate.addEventListener('click', createBox);
+btnDestroyer.addEventListener('click', destroyBox);
 
-function handleButtonClick(event) {
-  if (event.target.dataset.create) {
-    createBoxes();
-  } else if (event.target.dataset.destroy) {
-    destroyBoxes();
+function validateCount(count) {
+  if (!isNaN(count) && count >= 1 && count <= 100) {
+    return count;
   }
 }
 
-function createBoxes() {
-  const input = controls.querySelector('input');
-  const amount = Number(input.value);
-
-  if (amount < 1 || amount > 100 || isNaN(amount)) {
-    return;
+function createBox() {
+  const boxSize = 30;
+  const count = validateCount(input.value);
+  if (count) {
+    for (let i = 0; i < count; i++) {
+      const box = document.createElement('div');
+      const size = boxSize + i * 10;
+      box.style.width = `${size}px`;
+      box.style.height = `${size}px`;
+      box.style.backgroundColor = getRandomHexColor();
+      boxContainers.appendChild(box);
+    }
+    console.log(count);
+  } else {
+    return alert('Please enter a valid number between 1 and 100');
   }
-
-  clearBoxes();
-  for (let i = 0; i < amount; i++) {
-    const box = document.createElement('div');
-    box.classList.add('box');
-    box.style.width = `${30 + i * 10}px`;
-    box.style.height = `${30 + i * 10}px`;
-    box.style.backgroundColor = getRandomHexColor();
-    boxesContainer.appendChild(box);
+  function getRandomHexColor() {
+    return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
   }
 
   input.value = '';
 }
-
-function destroyBoxes() {
-  clearBoxes();
-}
-
-function clearBoxes() {
-  while (boxesContainer.firstChild) {
-    boxesContainer.removeChild(boxesContainer.firstChild);
-  }
-}
-
-function getRandomHexColor() {
-  return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, 0)}`;
+function destroyBox() {
+  boxContainers.innerHTML = '';
 }
