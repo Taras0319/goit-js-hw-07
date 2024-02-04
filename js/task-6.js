@@ -1,40 +1,42 @@
-const boxForItems = document.querySelector('#controls');
-const input = boxForItems.querySelector('input');
-const btnCreate = boxForItems.querySelector('[data-create]');
-const btnDestroyer = boxForItems.querySelector('[data-destroy]');
-const boxContainers = document.querySelector('#boxes');
+const boxesContainer = document.querySelector('#boxes');
+const boxCountInput = document.querySelector('input');
+const createButton = document.querySelector('[data-create]');
+const destroyButton = document.querySelector('[data-destroy]');
 
-btnCreate.addEventListener('click', createBox);
-btnDestroyer.addEventListener('click', destroyBox);
-
-function validateCount(count) {
-  if (!isNaN(count) && count >= 1 && count <= 100) {
-    return count;
-  }
+function getRandomHexColor() {
+  return `#${Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, 0)}`;
 }
 
-function createBox() {
-  const boxSize = 30;
-  const count = validateCount(input.value);
-  if (count) {
-    for (let i = 0; i < count; i++) {
+function destroyBoxes() {
+  boxesContainer.innerHTML = '';
+  boxCountInput.value = '';
+}
+
+function createBoxes(amount) {
+  boxesContainer.innerHTML = '';
+  let size = 30;
+  if (amount > 0 && amount <= 100) {
+    for (let i = 0; i < amount; i++) {
       const box = document.createElement('div');
-      const size = boxSize + i * 10;
+      box.classList.add('box');
+      box.style.backgroundColor = getRandomHexColor();
       box.style.width = `${size}px`;
       box.style.height = `${size}px`;
-      box.style.backgroundColor = getRandomHexColor();
-      boxContainers.appendChild(box);
-    }
-    console.log(count);
-  } else {
-    return alert('Please enter a valid number between 1 and 100');
-  }
-  function getRandomHexColor() {
-    return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-  }
+      boxesContainer.appendChild(box);
 
-  input.value = '';
+      size += 10;
+    }
+
+    boxCountInput.value = '';
+  }
 }
-function destroyBox() {
-  boxContainers.innerHTML = '';
+
+function onCreateClick() {
+  const amount = parseInt(boxCountInput.value);
+  createBoxes(amount);
 }
+
+createButton.addEventListener('click', onCreateClick);
+destroyButton.addEventListener('click', destroyBoxes);
